@@ -34,6 +34,7 @@ export const dashboards = pgTable('dashboards', {
   description: text('description'),
   layout: jsonb('layout').$type<Widget[]>().notNull().default([]),
   isPublic: boolean('is_public').default(false).notNull(),
+  isFavorite: boolean('is_favorite').default(false).notNull(),
   createdBy: uuid('created_by').references(() => users.id).notNull(),
   createdAt: timestamp('created_at').defaultNow().notNull(),
   updatedAt: timestamp('updated_at').defaultNow().notNull(),

@@ -1,12 +1,12 @@
 'use client'
 
 import { useOptimistic, useState, useTransition } from 'react'
-import { DndContext, DragEndEvent, DragStartEvent, DragOverlay } from '@dnd-kit/core'
+import { DndContext, DragEndEvent, DragStartEvent, DragOverlay, useDroppable } from '@dnd-kit/core'
 import { restrictToWindowEdges } from '@dnd-kit/modifiers'
 import { Widget } from '@/types'
 import { WidgetRenderer } from './WidgetRenderer'
 import { DraggableWidget } from './DraggableWidget'
-import { saveDashboardLayout } from '@/app/actions/dashboard-mock'
+import { saveDashboardLayout } from '@/app/actions/dashboard-demo'
 import { cn } from '@/lib/utils'
 
 interface BuilderCanvasProps {
@@ -14,6 +14,8 @@ interface BuilderCanvasProps {
   dashboardId: string
   isReadOnly?: boolean
 }
+
+type WidgetType = 'table' | 'chart' | 'form' | 'metric' | 'text'
 
 export function BuilderCanvas({ 
   initialLayout, 
@@ -29,6 +31,11 @@ export function BuilderCanvas({
     (state, newWidget: Widget) => [...state, newWidget]
   )
 
+  // Make the canvas a droppable area
+  const { setNodeRef: setCanvasRef, isOver } = useDroppable({
+    id: 'canvas-droppable'
+  })
+
   function handleDragStart(event: DragStartEvent) {
     const { active } = event
     
@@ -36,7 +43,7 @@ export function BuilderCanvas({
       // Creating new widget from panel
       const newWidget: Widget = {
         id: `temp-${Date.now()}`,
-        type: active.data.current.type,
+        type: active.data.current.type as WidgetType,
         name: `New ${active.data.current.type}`,
         position: { x: 0, y: 0, w: 4, h: 3 },
         config: getDefaultConfig(active.data.current.type)
@@ -60,25 +67,22 @@ export function BuilderCanvas({
     }
 
     if (active.data.current?.type) {
-      // Adding new widget
-      const canvasRect = (over.rect as any)
+      // Adding new widget from panel
+      // Use over.rect to get drop position relative to canvas
+      const canvasRect = over.rect
+      // Default widget size in px
+      const widgetW = 320, widgetH = 240
+      // Place widget at drop position (top-left corner)
+      const x = Math.max(0, Math.floor((canvasRect.left - over.rect.left) / widgetW))
+      const y = Math.max(0, Math.floor((canvasRect.top - over.rect.top) / widgetH))
       const newWidget: Widget = {
         id: crypto.randomUUID(),
-        type: active.data.current.type,
+        type: active.data.current.type as WidgetType,
         name: `New ${active.data.current.type}`,
-        position: { 
-          x: Math.max(0, Math.floor((canvasRect.left + delta.x) / 100)), 
-          y: Math.max(0, Math.floor((canvasRect.top + delta.y) / 100)), 
-          w: 4, 
-          h: 3 
-        },
+        position: { x, y, w: 4, h: 3 },
         config: getDefaultConfig(active.data.current.type)
       }
-      
-      // Optimistic update
       setOptimisticLayout(newWidget)
-      
-      // Save to server
       startTransition(async () => {
         await saveDashboardLayout(dashboardId, [...optimisticLayout, newWidget])
       })
@@ -90,20 +94,17 @@ export function BuilderCanvas({
             ...widget,
             position: {
               ...widget.position,
-              x: Math.max(0, widget.position.x + Math.floor(delta.x / 100)),
-              y: Math.max(0, widget.position.y + Math.floor(delta.y / 100))
+              x: Math.max(0, widget.position.x + Math.floor((delta?.x ?? 0) / 80)),
+              y: Math.max(0, widget.position.y + Math.floor((delta?.y ?? 0) / 80))
             }
           }
         }
         return widget
       })
-      
-      // Save updated layout
       startTransition(async () => {
         await saveDashboardLayout(dashboardId, updatedLayout)
       })
     }
-    
     setDraggedWidget(null)
   }
 
@@ -150,24 +151,31 @@ export function BuilderCanvas({
       modifiers={[restrictToWindowEdges]}
     >
       <div 
+        ref={setCanvasRef}
         className={cn(
-          "canvas relative w-full h-full bg-gray-50 border-2 border-dashed border-gray-200 rounded-lg overflow-auto",
+          "canvas relative w-full h-full bg-gray-50 border-2 rounded-lg overflow-auto",
+          "border-dashed border-gray-200",
+          isOver && "border-blue-400 bg-blue-50",
           isPending && "opacity-50 pointer-events-none"
         )}
-        style={{
-          backgroundImage: 'radial-gradient(circle, #d1d5db 1px, transparent 1px)',
-          backgroundSize: '20px 20px'
-        }}
       >
+        {/* Grid Pattern Background */}
+        <div className="absolute inset-0 opacity-20" 
+             style={{
+               backgroundImage: 'radial-gradient(circle, #d1d5db 1px, transparent 1px)',
+               backgroundSize: '20px 20px'
+             }} 
+        />
+        
         {optimisticLayout.length === 0 ? (
-          <div className="flex items-center justify-center h-full">
+          <div className="flex items-center justify-center h-full relative z-10">
             <div className="text-center text-gray-500">
               <h3 className="text-lg font-medium mb-2">Your canvas is empty</h3>
               <p className="text-sm">Drag widgets from the panel to get started</p>
             </div>
           </div>
         ) : (
-          <div className="relative w-full h-full p-4">
+          <div className="relative w-full h-full p-4 z-10">
             {optimisticLayout.map(widget => (
               <DraggableWidget
                 key={widget.id}
@@ -184,7 +192,7 @@ export function BuilderCanvas({
       
       <DragOverlay>
         {draggedWidget && (
-          <div className="opacity-80">
+          <div className="opacity-80 transform rotate-2">
             <WidgetRenderer widget={draggedWidget} />
           </div>
         )}

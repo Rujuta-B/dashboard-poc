@@ -1,5 +1,5 @@
 import { Suspense } from 'react'
-import { getDashboard } from '@/app/actions/dashboard'
+import { getDashboard } from '@/app/actions/dashboard-demo'
 import { BuilderCanvas } from '@/components/builder/BuilderCanvas'
 import { WidgetPanel } from '@/components/builder/WidgetPanel'
 import { Button } from '@/components/ui/button'

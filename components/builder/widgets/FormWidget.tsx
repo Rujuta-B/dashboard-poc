@@ -33,7 +33,11 @@ export function FormWidget({ config }: FormWidgetProps) {
             </label>
             
             {field.type === 'select' ? (
-              <select className="w-full p-2 border border-gray-300 rounded-md text-sm">
+              <select 
+                className="w-full p-2 border border-gray-300 rounded-md text-sm"
+                aria-label={field.label}
+                title={field.label}
+              >
                 <option value="">Select an option</option>
                 {field.options?.map(option => (
                   <option key={option} value={option}>{option}</option>
