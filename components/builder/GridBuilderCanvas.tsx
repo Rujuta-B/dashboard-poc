@@ -1,10 +1,10 @@
 'use client'
 
-import { useEffect, useCallback, useTransition } from 'react'
+import { useEffect, useCallback, useTransition, useRef } from 'react'
 import GridLayout, { Layout } from 'react-grid-layout'
 import { useBuilderStore, Widget } from '@/lib/store/builder-store'
 import { WidgetRenderer } from './WidgetRenderer'
-import { WidgetCard } from './WidgetCard'
+import { WidgetCard } from '@/components/builder/WidgetCard'
 import { saveDashboardLayout } from '@/app/actions/dashboard-demo'
 import { cn } from '@/lib/utils'
 import 'react-grid-layout/css/styles.css'
@@ -22,6 +22,7 @@ export function GridBuilderCanvas({
   isReadOnly = false 
 }: GridBuilderCanvasProps) {
   const [isPending, startTransition] = useTransition()
+  const initializedRef = useRef(false)
   
   const {
     widgets,
@@ -35,10 +36,13 @@ export function GridBuilderCanvas({
     removeWidget
   } = useBuilderStore()
 
-  // Initialize store with dashboard data
+  // Initialize store with dashboard data (only once per dashboard)
   useEffect(() => {
-    setDashboardId(dashboardId)
-    setWidgets(initialLayout)
+    if (!initializedRef.current || dashboardId !== useBuilderStore.getState().dashboardId) {
+      setDashboardId(dashboardId)
+      setWidgets(initialLayout)
+      initializedRef.current = true
+    }
   }, [dashboardId, initialLayout, setDashboardId, setWidgets])
 
   // Convert widgets to react-grid-layout format
@@ -72,30 +76,12 @@ export function GridBuilderCanvas({
     // Save to server (optimistically)
     if (!isReadOnly) {
       startTransition(async () => {
-        const updatedWidgets = widgets.map((widget) => {
-          const layoutItem = newLayout.find((l) => l.i === widget.id)
-          if (layoutItem) {
-            return {
-              ...widget,
-              layout: {
-                i: layoutItem.i,
-                x: layoutItem.x,
-                y: layoutItem.y,
-                w: layoutItem.w,
-                h: layoutItem.h,
-                minW: layoutItem.minW,
-                minH: layoutItem.minH,
-                maxW: layoutItem.maxW,
-                maxH: layoutItem.maxH
-              }
-            }
-          }
-          return widget
-        })
-        await saveDashboardLayout(dashboardId, updatedWidgets)
+        // Get fresh widgets from store after update
+        const currentWidgets = useBuilderStore.getState().widgets
+        await saveDashboardLayout(dashboardId, currentWidgets)
       })
     }
-  }, [widgets, dashboardId, isReadOnly, updateLayout])
+  }, [dashboardId, isReadOnly, updateLayout])
 
   // Handle widget deletion
   const handleDeleteWidget = useCallback((id: string) => {
@@ -104,11 +90,12 @@ export function GridBuilderCanvas({
     // Save to server
     if (!isReadOnly) {
       startTransition(async () => {
-        const updatedWidgets = widgets.filter((w) => w.id !== id)
-        await saveDashboardLayout(dashboardId, updatedWidgets)
+        // Get updated widgets from store
+        const currentWidgets = useBuilderStore.getState().widgets
+        await saveDashboardLayout(dashboardId, currentWidgets)
       })
     }
-  }, [widgets, dashboardId, isReadOnly, removeWidget])
+  }, [dashboardId, isReadOnly, removeWidget])
 
   return (
     <div 
@@ -120,14 +107,7 @@ export function GridBuilderCanvas({
     >
       {/* Grid Pattern Background */}
       <div 
-        className="absolute inset-0 opacity-10 pointer-events-none"
-        style={{
-          backgroundImage: `
-            linear-gradient(to right, #e5e7eb 1px, transparent 1px),
-            linear-gradient(to bottom, #e5e7eb 1px, transparent 1px)
-          `,
-          backgroundSize: '40px 40px'
-        }}
+        className="absolute inset-0 opacity-10 pointer-events-none bg-grid-pattern"
       />
 
       {widgets.length === 0 ? (

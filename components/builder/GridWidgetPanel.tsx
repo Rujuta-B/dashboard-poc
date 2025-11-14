@@ -179,20 +179,18 @@ export function GridWidgetPanel({ dashboardId }: WidgetPanelProps) {
       config: getDefaultConfig(widgetType.type)
     }
 
-    // Add to store
+    // Add to store (this generates ID and updates state immediately)
     addWidget(newWidget)
 
-    // Save to server
+    // Save to server in background
+    // Note: We need to get the updated widgets after addWidget completes
     startTransition(async () => {
-      await saveDashboardLayout(dashboardId, [
-        ...widgets,
-        { 
-          ...newWidget, 
-          id: crypto.randomUUID(),
-          createdAt: new Date(),
-          updatedAt: new Date()
-        }
-      ])
+      // Wait a tick for the store to update
+      await new Promise(resolve => setTimeout(resolve, 0))
+      
+      // Now get fresh widgets from store which includes the new one
+      const currentWidgets = useBuilderStore.getState().widgets
+      await saveDashboardLayout(dashboardId, currentWidgets)
     })
   }
 
