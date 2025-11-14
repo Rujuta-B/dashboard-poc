@@ -70,6 +70,17 @@ Then visit: **http://localhost:3000**
 - ✅ Server Actions security info
 - ✅ Turbopack performance comparison
 
+### 6. ✅ AI Form Generator (/ai-form-generator)
+**Status:** ✅ WORKING (requires OPENAI_API_KEY)
+**Features:**
+- ✅ Natural language to form generation
+- ✅ AI-powered field type detection
+- ✅ Automatic validation rules
+- ✅ Live form preview
+- ✅ JSON schema export
+- ✅ Example prompts
+- **Note:** Requires OpenAI API key in `.env.local`
+
 ## 🎯 React 19 Features Demonstrated
 
 | # | Feature | Location | Status |
@@ -143,11 +154,13 @@ app/
 ├── dashboard/[id]/page.tsx           # ✅ Builder canvas
 ├── react19-features/page.tsx         # ✅ React 19 features demo
 ├── nextjs15-features/page.tsx        # ✅ Next.js 15 features demo
+├── ai-form-generator/page.tsx        # ✅ AI form generator
 ├── demo-async-params/[id]/page.tsx   # ✅ Async params demo
 ├── api/
 │   └── demo-request/route.ts         # ✅ Async cookies/headers API
 └── actions/
-    └── dashboard-demo.ts             # ✅ Demo actions (no DB needed)
+    ├── dashboard-demo.ts             # ✅ Demo actions (no DB needed)
+    └── ai-form-generator.ts          # ✅ AI form generation actions
 
 components/
 ├── layout/
@@ -162,6 +175,8 @@ components/
 │   └── DraggableWidget.tsx           # ✅ Drag functionality
 ├── widgets/
 │   └── DataTableWidget.tsx           # ✅ useDeferredValue
+├── ai/
+│   └── AIFormGenerator.tsx           # ✅ AI form generator UI
 └── ui/
     ├── submit-button.tsx             # ✅ useFormStatus
     └── ... (other UI components)
@@ -211,9 +226,11 @@ You can:
 1. **Quick Start**: Read `REACT19_QUICK_START.md`
 2. **React 19 Implementation**: Read `REACT19_IMPLEMENTATION.md`
 3. **Next.js 15 Implementation**: Read `NEXTJS15_IMPLEMENTATION.md`
-4. **React 19 Live Demo**: Visit `/react19-features`
-5. **Next.js 15 Live Demo**: Visit `/nextjs15-features`
-6. **Code Examples**: Browse `components/` and `app/` folders
+4. **AI Form Generator**: Read `AI_FORM_GENERATOR.md`
+5. **React 19 Live Demo**: Visit `/react19-features`
+6. **Next.js 15 Live Demo**: Visit `/nextjs15-features`
+7. **AI Form Generator Demo**: Visit `/ai-form-generator`
+8. **Code Examples**: Browse `components/` and `app/` folders
 
 ## 🐛 Troubleshooting
 
@@ -281,10 +298,11 @@ You can:
 - ✅ Drag and drop widgets
 - ✅ See all React 19 features in action
 - ✅ See all Next.js 15 features in action
+- ✅ Generate AI-powered forms (with API key)
 - ✅ Learn from interactive demos
 - ✅ Experience blazing-fast development with Turbopack
 
-**All 10 React 19 features + All 6 Next.js 15 features are fully functional!**
+**All 10 React 19 features + All 6 Next.js 15 features + AI Form Generator are fully functional!**
 
 ---
 

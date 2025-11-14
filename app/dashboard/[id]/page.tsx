@@ -6,11 +6,12 @@ import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 
 interface DashboardPageProps {
-  params: { id: string }
+  params: Promise<{ id: string }>
 }
 
 export default async function DashboardPage({ params }: DashboardPageProps) {
-  const dashboard = await getDashboard(params.id)
+  const { id } = await params
+  const dashboard = await getDashboard(id)
 
   return (
     <div className="flex h-screen bg-gray-50">
@@ -50,7 +51,7 @@ export default async function DashboardPage({ params }: DashboardPageProps) {
           }>
             <BuilderCanvas 
               initialLayout={dashboard.layout || []}
-              dashboardId={params.id}
+              dashboardId={id}
             />
           </Suspense>
         </div>

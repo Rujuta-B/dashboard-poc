@@ -8,7 +8,8 @@ import {
   LayoutDashboard, 
   Sparkles, 
   Menu,
-  X 
+  X,
+  Wand2
 } from 'lucide-react'
 import { useState } from 'react'
 
@@ -17,6 +18,7 @@ const navigation = [
   { name: 'Dashboards', href: '/dashboards', icon: LayoutDashboard },
   { name: 'React 19 Features', href: '/react19-features', icon: Sparkles },
   { name: 'Next.js 15 Features', href: '/nextjs15-features', icon: Sparkles },
+  { name: 'AI Form Generator', href: '/ai-form-generator', icon: Wand2 },
 ]
 
 export function NavBar() {
