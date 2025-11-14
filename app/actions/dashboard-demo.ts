@@ -86,6 +86,18 @@ export async function createDashboard(name: string, description?: string) {
     
     mockDB.dashboards.push(newDashboard as any)
     
+    // Next.js 15: Post-response analytics logging
+    // This runs after the response is sent to the client
+    if (typeof (global as any).unstable_after === 'function') {
+      (global as any).unstable_after(() => {
+        console.log('[Analytics] Dashboard created:', {
+          id: newDashboard.id,
+          name: newDashboard.name,
+          timestamp: new Date().toISOString()
+        })
+      })
+    }
+    
     revalidatePath('/dashboards')
     return { success: true, dashboard: newDashboard }
   } catch (error) {

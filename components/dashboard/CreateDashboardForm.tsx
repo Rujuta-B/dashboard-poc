@@ -70,6 +70,7 @@ export function CreateDashboardForm({ onSuccess }: { onSuccess?: () => void }) {
           placeholder="My Dashboard"
           required
           disabled={isPending}
+          autoComplete="off"
         />
       </div>
       
@@ -87,6 +88,14 @@ export function CreateDashboardForm({ onSuccess }: { onSuccess?: () => void }) {
       {state.error && (
         <Alert variant="destructive">
           <AlertDescription>{state.error}</AlertDescription>
+        </Alert>
+      )}
+      
+      {state.success && state.dashboard && (
+        <Alert className="bg-green-50 text-green-900 border-green-200">
+          <AlertDescription>
+            Dashboard created successfully! Redirecting...
+          </AlertDescription>
         </Alert>
       )}
       

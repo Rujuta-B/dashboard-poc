@@ -7,10 +7,16 @@ All features are now working without requiring database or authentication setup!
 ## 🚀 How to Run
 
 ```bash
+# Run with Turbopack (10x faster!)
 npm run dev
+
+# Or run with Webpack (fallback)
+npm run dev:webpack
 ```
 
 Then visit: **http://localhost:3000**
+
+**Note:** By default, `npm run dev` uses Turbopack for blazing-fast development!
 
 ## 📍 Working Pages
 
@@ -54,6 +60,16 @@ Then visit: **http://localhost:3000**
 - ✅ Tabbed navigation
 - ✅ 50-row data table demo
 
+### 5. ✅ Next.js 15 Features Demo (/nextjs15-features)
+**Status:** ✅ WORKING  
+**Features:**
+- ✅ Enhanced Forms demonstration
+- ✅ Async Request APIs demo
+- ✅ unstable_after explanation
+- ✅ Improved caching overview
+- ✅ Server Actions security info
+- ✅ Turbopack performance comparison
+
 ## 🎯 React 19 Features Demonstrated
 
 | # | Feature | Location | Status |
@@ -68,6 +84,17 @@ Then visit: **http://localhost:3000**
 | 8 | **use()** | Dashboard pages | ✅ |
 | 9 | **'use client'** | All interactive components | ✅ |
 | 10 | **'use server'** | dashboard-demo.ts | ✅ |
+
+## 🚀 Next.js 15 Features Demonstrated
+
+| # | Feature | Location | Status |
+|---|---------|----------|--------|
+| 1 | **Enhanced Forms** | CreateDashboardForm | ✅ |
+| 2 | **Async Request APIs** | demo-request API, demo-async-params | ✅ |
+| 3 | **unstable_after** | dashboard-demo.ts | ✅ |
+| 4 | **Improved Caching** | next.config.js (staleTimes) | ✅ |
+| 5 | **Server Actions Security** | next.config.js (bodySizeLimit) | ✅ |
+| 6 | **Turbopack** | package.json (--turbo) | ✅ |
 
 ## ✨ Interactive Demos to Try
 
@@ -114,7 +141,11 @@ app/
 ├── page.tsx                          # ✅ Homepage
 ├── dashboards/page.tsx               # ✅ Dashboard list
 ├── dashboard/[id]/page.tsx           # ✅ Builder canvas
-├── react19-features/page.tsx         # ✅ Features demo
+├── react19-features/page.tsx         # ✅ React 19 features demo
+├── nextjs15-features/page.tsx        # ✅ Next.js 15 features demo
+├── demo-async-params/[id]/page.tsx   # ✅ Async params demo
+├── api/
+│   └── demo-request/route.ts         # ✅ Async cookies/headers API
 └── actions/
     └── dashboard-demo.ts             # ✅ Demo actions (no DB needed)
 
@@ -178,9 +209,11 @@ You can:
 ## 🎓 Learning Resources
 
 1. **Quick Start**: Read `REACT19_QUICK_START.md`
-2. **Implementation**: Read `REACT19_IMPLEMENTATION.md`
-3. **Live Demo**: Visit `/react19-features`
-4. **Code Examples**: Browse `components/` folder
+2. **React 19 Implementation**: Read `REACT19_IMPLEMENTATION.md`
+3. **Next.js 15 Implementation**: Read `NEXTJS15_IMPLEMENTATION.md`
+4. **React 19 Live Demo**: Visit `/react19-features`
+5. **Next.js 15 Live Demo**: Visit `/nextjs15-features`
+6. **Code Examples**: Browse `components/` and `app/` folders
 
 ## 🐛 Troubleshooting
 
@@ -247,9 +280,11 @@ You can:
 - ✅ Search and filter
 - ✅ Drag and drop widgets
 - ✅ See all React 19 features in action
+- ✅ See all Next.js 15 features in action
 - ✅ Learn from interactive demos
+- ✅ Experience blazing-fast development with Turbopack
 
-**All 10 React 19 features are fully functional!**
+**All 10 React 19 features + All 6 Next.js 15 features are fully functional!**
 
 ---
 
