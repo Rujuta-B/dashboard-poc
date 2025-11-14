@@ -27,8 +27,8 @@ export default function HomePage() {
           </h1>
           
           <p className="text-xl text-gray-600 mb-8">
-            A production-ready showcase of all <strong>React 19</strong> and <strong>Next.js 15 features</strong>, 
-            featuring drag-and-drop, real-time updates, Turbopack, and modern web capabilities.
+            A production-ready showcase of <strong>React 19</strong> and
+            featuring real-time updates and modern web capabilities.
           </p>
           
           <div className="flex flex-wrap justify-center gap-4">

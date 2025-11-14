@@ -3,6 +3,8 @@
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { Widget } from '@/types'
+import { Widget as NewWidget } from '@/lib/store/builder-store'
+import { convertWidgetsToOld } from '@/lib/utils/widget-converter'
 
 // Mock database for demo purposes
 const mockDB = {
@@ -48,14 +50,19 @@ const mockDB = {
 
 export async function saveDashboardLayout(
   dashboardId: string,
-  layout: Widget[]
+  layout: Widget[] | NewWidget[]
 ) {
   try {
     await new Promise(resolve => setTimeout(resolve, 100))
     
+    // Convert new format to old format if needed
+    const oldFormatLayout = layout.length > 0 && 'layout' in layout[0]
+      ? convertWidgetsToOld(layout as NewWidget[])
+      : layout as Widget[]
+    
     const dashboard = mockDB.dashboards.find(d => d.id === dashboardId)
     if (dashboard) {
-      dashboard.layout = layout
+      dashboard.layout = oldFormatLayout
       dashboard.updatedAt = new Date()
     }
     

@@ -17,11 +17,13 @@ npm run dev
 ## ✨ Features
 
 ### Core Capabilities
-- **🎨 Drag & Drop Builder**: Visual dashboard creation with intuitive widget placement
+- **🎨 Drag & Drop Builder**: Grid-based visual dashboard creation with react-grid-layout
+- **🎯 Zustand State Management**: Global state with DevTools for widget management
 - **⚡ React 19 Complete**: All 10 major features demonstrated with real examples
 - **🚀 Next.js 15 Complete**: All 6 capabilities including Turbopack, async APIs, unstable_after
 - **🤖 AI Form Generator**: Generate production-ready forms from natural language (GPT-4)
-- **📊 Dynamic Widgets**: Tables, charts, forms, metrics, and text components
+- **🔒 Row Level Security**: Multi-tenant data isolation with PostgreSQL RLS
+- **� Dynamic Widgets**: Tables, charts, forms, metrics, and text components with drag, resize, delete
 - **💨 Optimistic UI**: Instant updates with React 19 useOptimistic
 - **🎯 Zero Setup**: Works without database or authentication
 
@@ -82,6 +84,43 @@ OPENAI_API_KEY=sk-your-key-here
 
 **Demo:** http://localhost:3000/ai-form-generator
 
+## 🔒 Row Level Security (RLS)
+
+Production-ready multi-tenant data isolation using PostgreSQL RLS:
+
+**Features:**
+- ✅ Automatic organization-level data isolation
+- ✅ Database-enforced security (defense in depth)
+- ✅ Performance-optimized with indexes
+- ✅ Seamless Clerk integration
+- ✅ Helper functions for easy context management
+
+**Usage:**
+```typescript
+'use server'
+
+import { getDb } from '@/lib/db/client'
+
+export async function getDashboards() {
+  const db = await getDb() // Auto-sets RLS from Clerk
+  // Only returns dashboards for current organization
+  return await db.query.dashboards.findMany()
+}
+```
+
+**Setup:**
+```bash
+# Apply RLS migration
+npm run db:migrate
+
+# Verify RLS is working
+# See docs/RLS_USAGE_GUIDE.md
+```
+
+**Documentation:**
+- [RLS Implementation Guide](docs/RLS_IMPLEMENTATION.md)
+- [RLS Usage Guide](docs/RLS_USAGE_GUIDE.md)
+
 ## 🏗️ Technology Stack
 
 ### Core
@@ -91,11 +130,15 @@ OPENAI_API_KEY=sk-your-key-here
 - **Tailwind CSS 4** - Modern styling
 - **Shadcn/ui** - Beautiful components
 
+### State & Data
+- **Zustand** - Global state management with DevTools
+- **React Grid Layout** - Drag-and-drop grid system
+- **@dnd-kit** - Drag and drop primitives
+
 ### AI & Data
 - **Vercel AI SDK** - Structured output generation
 - **OpenAI GPT-4o** - Form generation
 - **Zod** - Runtime validation
-- **dnd-kit** - Drag and drop
 
 ### Optional (Not Required)
 - **PostgreSQL** - Production database
@@ -125,7 +168,16 @@ dashboard-builder/
 │   └── widgets/            # Widget implementations
 ├── lib/                    # Utilities
 │   ├── db/                # Database (optional)
+│   │   ├── client.ts          # DB connection with RLS
+│   │   ├── rls.ts            # RLS utilities
+│   │   └── schema.ts         # Database schema
 │   └── utils.ts           # Helper functions
+├── db/                     # Database migrations
+│   └── migrations/
+│       └── 003_enable_rls.sql  # RLS policies
+├── docs/                   # Documentation
+│   ├── RLS_IMPLEMENTATION.md   # RLS guide
+│   └── RLS_USAGE_GUIDE.md     # RLS quick start
 └── types/                 # TypeScript definitions
 ```
 
@@ -135,6 +187,9 @@ dashboard-builder/
 - **[REACT19_IMPLEMENTATION.md](REACT19_IMPLEMENTATION.md)** - React 19 features guide
 - **[NEXTJS15_IMPLEMENTATION.md](NEXTJS15_IMPLEMENTATION.md)** - Next.js 15 features guide
 - **[AI_FORM_GENERATOR.md](AI_FORM_GENERATOR.md)** - AI form generation guide
+- **[docs/DRAG_DROP_IMPLEMENTATION.md](docs/DRAG_DROP_IMPLEMENTATION.md)** - Drag & drop guide
+- **[docs/RLS_IMPLEMENTATION.md](docs/RLS_IMPLEMENTATION.md)** - Row Level Security guide
+- **[docs/RLS_USAGE_GUIDE.md](docs/RLS_USAGE_GUIDE.md)** - RLS quick start
 - **[REACT19_QUICK_START.md](REACT19_QUICK_START.md)** - Quick React 19 reference
 
 ## 🎓 Learning & Examples

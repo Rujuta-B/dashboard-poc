@@ -44,11 +44,19 @@ Then visit: **http://localhost:3000**
 ### 3. ✅ Builder Canvas (/dashboard/[id])
 **Status:** ✅ WORKING  
 **Features:**
-- ✅ Drag widgets from panel
-- ✅ Drop widgets on canvas
+- ✅ **React Grid Layout** - Professional grid-based drag and drop
+- ✅ **Zustand Store** - Global state management with DevTools
+- ✅ Click to add widgets from panel
+- ✅ Drag widgets to reposition
+- ✅ Resize widgets by dragging edges
+- ✅ Delete widgets with toolbar button
+- ✅ Duplicate widgets with offset
+- ✅ Select widgets (visual highlight)
 - ✅ useOptimistic (instant widget placement)
-- ✅ Server Actions (background save)
+- ✅ Server Actions (background auto-save)
 - ✅ 5 widget types: Table, Chart, Form, Metric, Text
+- ✅ Widget toolbar (drag handle, duplicate, settings, delete)
+- ✅ Grid background with visual guides
 - **Try with:** `/dashboard/demo-1` or any ID
 
 ### 4. ✅ React 19 Features Demo (/react19-features)
@@ -107,6 +115,53 @@ Then visit: **http://localhost:3000**
 | 5 | **Server Actions Security** | next.config.js (bodySizeLimit) | ✅ |
 | 6 | **Turbopack** | package.json (--turbo) | ✅ |
 
+## 🔒 Row Level Security (RLS) Implemented
+
+| Feature | Location | Status |
+|---------|----------|--------|
+| **RLS Migration** | db/migrations/003_enable_rls.sql | ✅ |
+| **RLS Utilities** | lib/db/rls.ts | ✅ |
+| **Clerk Integration** | lib/db/client.ts (getDb) | ✅ |
+| **Helper Functions** | setOrgContext, getCurrentOrgId, etc. | ✅ |
+| **Performance Indexes** | 6 indexes for RLS optimization | ✅ |
+| **Documentation** | docs/RLS_IMPLEMENTATION.md | ✅ |
+| **Usage Guide** | docs/RLS_USAGE_GUIDE.md | ✅ |
+
+**RLS Features:**
+- ✅ Automatic organization-level data isolation
+- ✅ Database-enforced security (defense in depth)
+- ✅ 5 tables protected (organizations, users, dashboards, widgets, data_sources)
+- ✅ Seamless Clerk authentication integration
+- ✅ Easy-to-use utility functions
+- ✅ Complete documentation and examples
+
+## 🎨 Drag & Drop System
+
+| Feature | Technology | Status |
+|---------|-----------|--------|
+| **Grid Layout** | react-grid-layout | ✅ |
+| **State Management** | Zustand with DevTools | ✅ |
+| **Widget Store** | lib/store/builder-store.ts | ✅ |
+| **Add Widgets** | Click-to-add from panel | ✅ |
+| **Drag Widgets** | Drag handle on toolbar | ✅ |
+| **Resize Widgets** | Drag edges/corners | ✅ |
+| **Delete Widgets** | Toolbar button | ✅ |
+| **Duplicate Widgets** | Toolbar button | ✅ |
+| **Select Widgets** | Click with visual highlight | ✅ |
+| **Auto-Save** | Background persistence | ✅ |
+| **Optimistic Updates** | Instant UI feedback | ✅ |
+| **Documentation** | docs/DRAG_DROP_IMPLEMENTATION.md | ✅ |
+
+**Drag & Drop Features:**
+- ✅ 12-column responsive grid
+- ✅ 60px row height with auto-height
+- ✅ 16px gaps between widgets
+- ✅ Vertical compacting for space efficiency
+- ✅ Collision detection and prevention
+- ✅ Min/max size constraints per widget
+- ✅ Widget toolbar (visible on hover/select)
+- ✅ Format conversion (old position ↔ new layout)
+
 ## ✨ Interactive Demos to Try
 
 ### Demo 1: Optimistic Favorites
@@ -123,12 +178,16 @@ Then visit: **http://localhost:3000**
 4. UI opacity changes during filtering
 5. Results update smoothly
 
-### Demo 3: Drag & Drop
+### Demo 3: Drag & Drop Widgets
 1. Go to `/dashboard/demo-1`
-2. Drag any widget from left panel
-3. Drop on canvas
-4. Notice: Widget appears **instantly**
-5. Server saves in background
+2. Click any widget in the left panel to add
+3. Widget appears on canvas instantly
+4. Hover over widget to see toolbar
+5. Drag the grip icon to move
+6. Drag corners/edges to resize
+7. Click duplicate to copy
+8. Click trash to delete
+9. Notice: All changes save automatically!
 
 ### Demo 4: Deferred Table Search
 1. Go to `/react19-features`
@@ -162,7 +221,29 @@ app/
     ├── dashboard-demo.ts             # ✅ Demo actions (no DB needed)
     └── ai-form-generator.ts          # ✅ AI form generation actions
 
-components/
+lib/
+├── store/
+│   └── builder-store.ts              # ✅ Zustand widget store
+├── db/
+│   ├── client.ts                     # ✅ DB connection with RLS
+│   ├── rls.ts                        # ✅ RLS utility functions
+│   └── schema.ts                     # ✅ Database schema
+└── utils/
+    └── widget-converter.ts           # ✅ Format conversion utilities
+
+db/migrations/
+└── 003_enable_rls.sql                # ✅ RLS policies & indexes
+
+docs/
+├── DRAG_DROP_IMPLEMENTATION.md       # ✅ Drag & drop complete guide
+├── RLS_IMPLEMENTATION.md             # ✅ RLS complete guide
+└── RLS_USAGE_GUIDE.md                # ✅ RLS quick start
+
+components/builder/
+├── GridBuilderCanvas.tsx             # ✅ Grid-based canvas
+├── GridWidgetPanel.tsx               # ✅ Widget library panel
+├── WidgetCard.tsx                    # ✅ Widget wrapper with toolbar
+└── WidgetRenderer.tsx                # ✅ Widget content renderer
 ├── layout/
 │   └── NavBar.tsx                    # ✅ Navigation
 ├── dashboard/
@@ -227,10 +308,13 @@ You can:
 2. **React 19 Implementation**: Read `REACT19_IMPLEMENTATION.md`
 3. **Next.js 15 Implementation**: Read `NEXTJS15_IMPLEMENTATION.md`
 4. **AI Form Generator**: Read `AI_FORM_GENERATOR.md`
-5. **React 19 Live Demo**: Visit `/react19-features`
-6. **Next.js 15 Live Demo**: Visit `/nextjs15-features`
-7. **AI Form Generator Demo**: Visit `/ai-form-generator`
-8. **Code Examples**: Browse `components/` and `app/` folders
+5. **Drag & Drop System**: Read `docs/DRAG_DROP_IMPLEMENTATION.md`
+6. **Row Level Security**: Read `docs/RLS_IMPLEMENTATION.md` & `docs/RLS_USAGE_GUIDE.md`
+7. **React 19 Live Demo**: Visit `/react19-features`
+8. **Next.js 15 Live Demo**: Visit `/nextjs15-features`
+9. **AI Form Generator Demo**: Visit `/ai-form-generator`
+10. **Drag & Drop Demo**: Visit `/dashboard/demo-1`
+11. **Code Examples**: Browse `components/` and `app/` folders
 
 ## 🐛 Troubleshooting
 
@@ -271,18 +355,25 @@ npm run build
 
 To make this production-ready with real data:
 
-1. **Add Database:**
+1. **Enable Row Level Security (Recommended):**
+   - Apply RLS migration: `npm run db:migrate`
+   - Verify with: Check `docs/RLS_USAGE_GUIDE.md`
+   - RLS automatically isolates data by organization
+   - Works seamlessly with Clerk auth
+
+2. **Add Database:**
    - Set up Neon PostgreSQL
    - Update `.env.local` with DATABASE_URL
    - Run `npm run db:push`
    - Switch imports back to `dashboard.ts`
 
-2. **Add Authentication:**
+3. **Add Authentication:**
    - Set up Clerk account
    - Add Clerk keys to `.env.local`
    - Update middleware
+   - RLS will auto-set context from Clerk
 
-3. **Deploy:**
+4. **Deploy:**
    - Push to Vercel
    - Add environment variables
    - Deploy!
@@ -302,7 +393,7 @@ You can:
 - ✅ Learn from interactive demos
 - ✅ Experience blazing-fast development with Turbopack
 
-**All 10 React 19 features + All 6 Next.js 15 features + AI Form Generator are fully functional!**
+**All 10 React 19 features + All 6 Next.js 15 features + AI Form Generator + Row Level Security + Advanced Drag & Drop are fully functional!**
 
 ---
 

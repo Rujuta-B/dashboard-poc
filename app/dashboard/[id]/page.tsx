@@ -1,9 +1,10 @@
 import { Suspense } from 'react'
 import { getDashboard } from '@/app/actions/dashboard-demo'
-import { BuilderCanvas } from '@/components/builder/BuilderCanvas'
-import { WidgetPanel } from '@/components/builder/WidgetPanel'
+import { GridBuilderCanvas } from '@/components/builder/GridBuilderCanvas'
+import { GridWidgetPanel } from '@/components/builder/GridWidgetPanel'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
+import { convertWidgetsToNew } from '@/lib/utils/widget-converter'
 
 interface DashboardPageProps {
   params: Promise<{ id: string }>
@@ -12,6 +13,9 @@ interface DashboardPageProps {
 export default async function DashboardPage({ params }: DashboardPageProps) {
   const { id } = await params
   const dashboard = await getDashboard(id)
+  
+  // Convert old widget format to new format
+  const widgets = convertWidgetsToNew(dashboard.layout || [])
 
   return (
     <div className="flex h-screen bg-gray-50">
@@ -40,7 +44,7 @@ export default async function DashboardPage({ params }: DashboardPageProps) {
       {/* Main Content */}
       <div className="flex flex-1 pt-20">
         {/* Widget Panel */}
-        <WidgetPanel />
+        <GridWidgetPanel dashboardId={id} />
         
         {/* Canvas */}
         <div className="flex-1 p-6">
@@ -49,8 +53,8 @@ export default async function DashboardPage({ params }: DashboardPageProps) {
               <div className="text-gray-500">Loading canvas...</div>
             </div>
           }>
-            <BuilderCanvas 
-              initialLayout={dashboard.layout || []}
+            <GridBuilderCanvas 
+              initialLayout={widgets}
               dashboardId={id}
             />
           </Suspense>

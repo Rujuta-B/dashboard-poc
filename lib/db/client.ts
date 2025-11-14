@@ -2,6 +2,7 @@ import { drizzle } from 'drizzle-orm/neon-http'
 import { neon } from '@neondatabase/serverless'
 import { auth } from '@clerk/nextjs/server'
 import * as schema from './schema'
+import { setOrgContext } from './rls'
 
 // Create the database connection
 const sql = neon(process.env.DATABASE_URL!)
@@ -19,8 +20,9 @@ export async function getDb() {
     throw new Error('Unauthorized: No organization ID found')
   }
 
-  // For now, return the regular db instance
-  // In production, you would set RLS context here
+  // Set RLS context for multi-tenant isolation
+  await setOrgContext(orgId)
+  
   return db
 }
 
