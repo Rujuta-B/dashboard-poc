@@ -47,7 +47,7 @@ export function AIFormGenerator() {
             key={index}
             name={field.name}
             placeholder={field.placeholder}
-            required={field.validation.required}
+            required={field.validation?.required}
             className={`${commonClasses} min-h-[100px]`}
           />
         );
@@ -57,7 +57,7 @@ export function AIFormGenerator() {
           <select
             key={index}
             name={field.name}
-            required={field.validation.required}
+            required={field.validation?.required}
             className={commonClasses}
             aria-label={field.label}
           >
@@ -90,10 +90,10 @@ export function AIFormGenerator() {
             type={field.type}
             name={field.name}
             placeholder={field.placeholder}
-            required={field.validation.required}
-            min={field.validation.min}
-            max={field.validation.max}
-            pattern={field.validation.pattern}
+            required={field.validation?.required}
+            min={field.validation?.min}
+            max={field.validation?.max}
+            pattern={field.validation?.pattern}
             className={commonClasses}
           />
         );
@@ -192,13 +192,13 @@ export function AIFormGenerator() {
                     {field.type !== 'checkbox' && (
                       <label htmlFor={field.name} className="block text-sm font-medium">
                         {field.label}
-                        {field.validation.required && (
+                        {field.validation?.required && (
                           <span className="text-red-500 ml-1">*</span>
                         )}
                       </label>
                     )}
                     {renderFormField(field, index)}
-                    {field.validation.min !== undefined && field.validation.max !== undefined && (
+                    {field.validation?.min !== undefined && field.validation?.max !== undefined && (
                       <p className="text-xs text-gray-500">
                         {field.type === 'number' 
                           ? `Range: ${field.validation.min} - ${field.validation.max}`

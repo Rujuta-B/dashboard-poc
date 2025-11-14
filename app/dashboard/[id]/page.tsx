@@ -60,13 +60,13 @@ export default async function DashboardPage({ params }: DashboardPageProps) {
           </Suspense>
         </div>
         
-        {/* Properties Panel */}
-        <div className="w-80 bg-white border-l border-gray-200 p-4">
+        {/* Properties Panel - Hidden for now */}
+        {/* <div className="w-80 bg-white border-l border-gray-200 p-4">
           <h2 className="text-lg font-semibold mb-4">Properties</h2>
           <div className="text-sm text-gray-500">
             Select a widget to edit its properties
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   )

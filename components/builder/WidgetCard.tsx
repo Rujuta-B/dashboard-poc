@@ -25,6 +25,16 @@ export function WidgetCard({
 }: WidgetCardProps) {
   const duplicateWidget = useBuilderStore((state) => state.duplicateWidget)
 
+  const handleClick = (e: React.MouseEvent) => {
+    // Don't select widget if clicking on interactive elements
+    const target = e.target as HTMLElement
+    const isInteractive = target.closest('input, select, textarea, button, a, [role="button"]')
+    
+    if (!isInteractive) {
+      onSelect()
+    }
+  }
+
   return (
     <div
       className={cn(
@@ -33,7 +43,7 @@ export function WidgetCard({
         "hover:shadow-md transition-all duration-200",
         isSelected && "ring-2 ring-blue-500 shadow-lg"
       )}
-      onClick={onSelect}
+      onClick={handleClick}
     >
       {/* Toolbar - Only visible on hover or when selected */}
       {!isReadOnly && (

@@ -135,7 +135,7 @@ export function GridBuilderCanvas({
           </div>
         </div>
       ) : (
-        <div className="relative w-full min-h-full p-4">
+        <div className="relative w-full min-h-full p-4 pt-12">
           <GridLayout
             className="layout"
             layout={layout}
@@ -153,7 +153,7 @@ export function GridBuilderCanvas({
             compactType="vertical"
             preventCollision={false}
             margin={[16, 16]}
-            containerPadding={[0, 0]}
+            containerPadding={[0, 40]}
           >
             {widgets.map((widget) => (
               <div

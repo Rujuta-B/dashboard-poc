@@ -42,8 +42,8 @@ export interface FormConfig {
     name: string
     label: string
     type: 'text' | 'number' | 'email' | 'select' | 'textarea' | 'date' | 'checkbox'
-    validation: {
-      required: boolean
+    validation?: {
+      required?: boolean
       min?: number
       max?: number
       pattern?: string

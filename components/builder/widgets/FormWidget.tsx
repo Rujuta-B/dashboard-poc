@@ -1,3 +1,5 @@
+'use client'
+
 import { FormConfig } from '@/types'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
@@ -22,14 +24,25 @@ export function FormWidget({ config }: FormWidgetProps) {
     }
   ]
 
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+    console.log('Form submitted (demo mode)')
+  }
+
+  const handleClick = (e: React.MouseEvent) => {
+    // Prevent widget selection when interacting with form elements
+    e.stopPropagation()
+  }
+
   return (
-    <div className="w-full h-full overflow-auto">
-      <form className="space-y-4 p-2">
+    <div className="w-full h-full overflow-auto" onClick={handleClick}>
+      <form className="space-y-4 p-2" onSubmit={handleSubmit}>
         {fields.map(field => (
           <div key={field.name}>
             <label className="block text-sm font-medium mb-1">
               {field.label}
-              {field.validation.required && <span className="text-red-500 ml-1">*</span>}
+              {field.validation?.required && <span className="text-red-500 ml-1">*</span>}
             </label>
             
             {field.type === 'select' ? (
